@@ -1,2 +1,2 @@
-apt install mc 
+sudo apt install mc 
 
