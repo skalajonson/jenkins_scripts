@@ -1,2 +1,2 @@
-sudo apt install mc -y
+echo Hello
 
