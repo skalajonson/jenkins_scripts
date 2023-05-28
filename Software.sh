@@ -1,5 +1,5 @@
-apt install mc -y
-apt install zip -y
-apt install docker-compose -y
-apt install apache -y
-apt install mysql -y
+apt install mc 
+apt install zip 
+apt install docker-compose 
+apt install apache 
+apt install mysql 
