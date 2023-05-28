@@ -1,3 +1,3 @@
 echo "Hello"
-sudo apt install mc -y
+apt-get install mc -y
 
