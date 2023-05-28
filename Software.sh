@@ -1,3 +1,3 @@
 echo "Hello"
-apt-get mc 
+apt-get mc -y
 
