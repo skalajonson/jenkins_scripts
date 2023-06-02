@@ -17,7 +17,6 @@ pipeline  {
                 '''
                 }
             }
-        }
         stage("install zabbix postgresql") {
             steps {
                 sh '''
