@@ -1,23 +1,15 @@
-#!groovy
-//  groovy Jenkinsfile
-properties([disableConcurrentBuilds()])
+pipeline {
+    agent any
 
-pipeline  {
-        agent any
-
-    options {
-        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
-        timestamps()
-    }
     stages {
-        stage("Configure region and docker network") {
+        stage('Configure region and docker network') {
             steps {
                 sh '''
-                mkdir /var/lib/zabbix/ && cd /var/lib/zabbix/ && ln -s /usr/share/zoneinfo/Europe/Kiev localtime && echo 'Europe/Kiev' > timezone && sudo docker network create zabbix-net 
+                mkdir /var/lib/zabbix/ && cd /var/lib/zabbix/ && ln -s /usr/share/zoneinfo/Europe/Kiev localtime && echo 'Europe/Kiev' > timezone && sudo docker network create zabbix-net
                 '''
-                }
             }
-        stage("install zabbix postgresql") {
+        }
+        stage('Install and run zabbix postgresql') {
             steps {
                 sh '''
                 sudo docker run --restart=always -d \
@@ -31,7 +23,7 @@ pipeline  {
                 '''
             }
         }
-        stage("install zabbix server") {
+        stage('install and run zabbix server') {
             steps {
                 sh '''
                 sudo docker run --restart=always \
@@ -44,10 +36,10 @@ pipeline  {
 -e POSTGRES_USER="zabbix" \
 -e POSTGRES_PASSWORD="zabbix" \
 -d chikibevchik/zabbix:server
-                '''
+               '''
             }
         }
-        stage("install zabbix web") {
+        stage('install and run zabbix web') {
             steps {
                 sh '''
                 sudo docker run --restart=always \
@@ -64,5 +56,6 @@ pipeline  {
 -d chikibevchik/zabbix:web
                 '''
             }
-        } 
+        }
     }
+}
