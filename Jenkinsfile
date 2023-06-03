@@ -79,7 +79,6 @@ pipeline {
             stage('Configure region and docker network') {
                 steps {
                     sh '''
-                    rm -rf /var/lib/zabbix/
                     mkdir /var/lib/zabbix/ && cd /var/lib/zabbix/ && ln -s /usr/share/zoneinfo/Europe/Kiev localtime && echo 'Europe/Kiev' > timezone && sudo docker network create zabbix-net
                     '''
                 }
