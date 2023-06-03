@@ -41,11 +41,10 @@ pipeline {
         }
         stage('docker login') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'DockerHub-Credentials', usernameVariable: 'chikibevchik', passwordVariable: 'topesto777')]) {
+                withCredentials([usernamePassword(credentialsId: 'DockerHub-Credentials', usernameVariable: 'chikibevchik', passwordVariable: 'topesto777')]) 
                     sh '''
                     docker login -u chikibevchik -p topesto777
                     '''
-                }
                 }
             }
             stage('docker push') {
