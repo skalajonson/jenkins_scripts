@@ -46,6 +46,7 @@ pipeline {
                     docker login -u chikibevchik -p topesto777
                     '''
                 }
+                }
             }
             stage('docker push') {
                 steps {
