@@ -12,8 +12,8 @@ pipeline {
         stage('Creating Dockerfiles') {
             steps {
                 sh '''
-                touch /home/kaka/zabbix/postgresql/Dockerfile 
-                touch /home/kaka/zabbix/server/Dockerfile 
+                touch /home/kaka/zabbix/postgresql/Dockerfile
+                touch /home/kaka/zabbix/server/Dockerfile
                 touch /home/kaka/zabbix/web/Dockerfile
                 '''
             }
@@ -45,46 +45,46 @@ pipeline {
                     sh '''
                     docker login -u chikibevchik -p topesto777
                     '''
+                }
             }
-        }
-        stage('docker push') {
-            steps {
-                sh '''
-                docker push chikibevchik/zabbixbyjenkins:postgres
-                docker push chikibevchik/zabbixbyjenkins:server
-                docker push chikibevchik/zabbixbyjenkins:web
-                '''
+            stage('docker push') {
+                steps {
+                    sh '''
+                    docker push chikibevchik/zabbixbyjenkins:postgres
+                    docker push chikibevchik/zabbixbyjenkins:server
+                    docker push chikibevchik/zabbixbyjenkins:web
+                    '''
+                }
             }
-        }
-        stage('Delete images') {
-            steps {
-                sh '''
-                docker rmi --force chikibevchik/zabbixbyjenkins:postgres
-                docker rmi --force chikibevchik/zabbixbyjenkins:server
-                docker rmi --force chikibevchik/zabbixbyjenkins:web
-                '''
+            stage('Delete images') {
+                steps {
+                    sh '''
+                    docker rmi --force chikibevchik/zabbixbyjenkins:postgres
+                    docker rmi --force chikibevchik/zabbixbyjenkins:server
+                    docker rmi --force chikibevchik/zabbixbyjenkins:web
+                    '''
+                }
             }
-        }
-        stage('pull docker images') {
-            steps {
-                sh '''
-                docker pull chikibevchik/zabbixbyjenkins:postgres
-                docker pull chikibevchik/zabbixbyjenkins:server
-                docker pull chikibevchik/zabbixbyjenkins:web
-                '''
+            stage('pull docker images') {
+                steps {
+                    sh '''
+                    docker pull chikibevchik/zabbixbyjenkins:postgres
+                    docker pull chikibevchik/zabbixbyjenkins:server
+                    docker pull chikibevchik/zabbixbyjenkins:web
+                    '''
+                }
             }
-        }
-        stage('Configure region and docker network') {
-            steps {
-                sh '''
-                mkdir /var/lib/zabbix/ && cd /var/lib/zabbix/ && ln -s /usr/share/zoneinfo/Europe/Kiev localtime && echo 'Europe/Kiev' > timezone && sudo docker network create zabbix-net
-                '''
+            stage('Configure region and docker network') {
+                steps {
+                    sh '''
+                    mkdir /var/lib/zabbix/ && cd /var/lib/zabbix/ && ln -s /usr/share/zoneinfo/Europe/Kiev localtime && echo 'Europe/Kiev' > timezone && sudo docker network create zabbix-net
+                    '''
+                }
             }
-        }
-        stage('Install and run zabbix postgresql') {
-            steps {
-                sh '''
-                sudo docker run --restart=always -d \
+            stage('Install and run zabbix postgresql') {
+                steps {
+                    sh '''
+                    sudo docker run --restart=always -d \
 --name zabbix-postgres \
 --network zabbix-net \
 -v /var/lib/zabbix/timezone:/etc/timezone \
@@ -92,13 +92,13 @@ pipeline {
 -e POSTGRES_PASSWORD=zabbix \
 -e POSTGRES_USER=zabbix \
 -d chikibevchik/zabbixbyjenkins:postgres
-                '''
+                    '''
+                }
             }
-        }
-        stage('install and run zabbix server') {
-            steps {
-                sh '''
-                sudo docker run --restart=always \
+            stage('install and run zabbix server') {
+                steps {
+                    sh '''
+                    sudo docker run --restart=always \
 --name zabbix-server \
 --network zabbix-net \
 -v /var/lib/zabbix/alertscripts:/usr/lib/zabbix/alertscripts \
@@ -108,13 +108,13 @@ pipeline {
 -e POSTGRES_USER="zabbix" \
 -e POSTGRES_PASSWORD="zabbix" \
 -d chikibevchik/zabbixbyjenkins:server
-               '''
+                    '''
+                }
             }
-        }
-        stage('install and run zabbix web') {
-            steps {
-                sh '''
-                sudo docker run --restart=always \
+            stage('install and run zabbix web') {
+                steps {
+                    sh '''
+                    sudo docker run --restart=always \
 --name zabbix-web \
 -p 80:8080 -p 443:8443 \
 --network zabbix-net \
@@ -126,7 +126,9 @@ pipeline {
 -e ZBX_SERVER_HOST="zabbix-server" \
 -e PHP_TZ="Europe/Kiev" \
 -d chikibevchik/zabbixbyjenkins:web
-                '''
+                    '''
+                }
             }
         }
     }
+}
