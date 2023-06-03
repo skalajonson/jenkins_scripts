@@ -39,14 +39,16 @@ pipeline {
                 '''
             }
         }
-        stage('docker login') {
+        stage("docker login") {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'DockerHub-Credentials', usernameVariable: 'chikibevchik', passwordVariable: 'topesto777')]) 
+                echo " ============== docker login =================="
+                withCredentials([usernamePassword(credentialsId: 'DockerHub-Credentials', usernameVariable: 'chikibevchik', passwordVariable: 'topesto777')]) {
                     sh '''
                     docker login -u chikibevchik -p topesto777
                     '''
                 }
             }
+        }
             stage('docker push') {
                 steps {
                     sh '''
